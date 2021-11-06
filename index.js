@@ -14,12 +14,8 @@ const client = new MongoClient(uri, { useNewUrlParser: true, useUnifiedTopology:
 async function run() {
   try {
     await client.connect();
-    // const database = client.db("insertDB");
-    // const haiku = database.collection("haiku");
     console.log("Connected to dataBase Succesfully");
     
-    // const result = await haiku.insertOne(doc);
-    // console.log(`A document was inserted with the _id: ${result.insertedId}`);
   } finally {
     // await client.close(); 
   }
