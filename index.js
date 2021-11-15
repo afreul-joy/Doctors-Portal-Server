@@ -16,6 +16,7 @@ const client = new MongoClient(uri, { useNewUrlParser: true, useUnifiedTopology:
 async function run() {
   try {
     await client.connect();
+    console.log('database connected succesffully yahho');
     const database = client.db('doctors_portal')
     const appointmentsCollection = database.collection('appointments');
     const userCollection = database.collection('users');
@@ -41,28 +42,28 @@ async function run() {
       const query = {email:email}
       const user = await userCollection.findOne(query);
       let isAdmin = false
-      if (user.role === 'admin') {
+      if (user?.role === 'admin') {
         isAdmin = true;
       }
       res.json({admin:isAdmin})
     })
 
-    app.post('/users',async(req, res)=> {
-      const user = req.body
-      const result = await userCollection.insertOne(user)
-      console.log(result);
-      res.json(result)
-    })
+        app.post('/users', async (req, res) => {
+            const user = req.body;
+            const result = await usersCollection.insertOne(user);
+            console.log(result);
+            res.json(result);
+        });
 
-    app.put('/users', async (req, res) => {
-      const user = req.body
-      // console.log(user); 
-      const filter = { email: user.email }
-      const options = { upsert: true };
-      const updateDoc = { $set: user };
-      const result = await userCollection.updateOne(filter, updateDoc, options)
-      res.json(result)
-    })
+        app.put('/users', async (req, res) => {
+            const user = req.body;
+            console.log('put', user);
+            const filter = { email: user.email };
+            const options = { upsert: true };
+            const updateDoc = { $set: user };
+            const result = await usersCollection.updateOne(filter, updateDoc, options);
+            res.json(result);
+        })     
 
     app.put('/users/admin',async (req, res) => {
       const user = req.body;
@@ -81,7 +82,7 @@ async function run() {
 run().catch(console.dir);
 
 app.get('/', (req, res) => {
-  res.send('Hello Doctorss Portal!')
+  res.send('Hello Doctorss Portal Server!')
 })
 
 app.listen(port, () => {
